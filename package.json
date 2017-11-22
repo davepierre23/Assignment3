@@ -1,0 +1,17 @@
+{
+  "name": "foodfork.js",
+  "version": "1.0.0",
+  "description": "a simple server bulit with express.js",
+  "main": "forkfork.js",
+  "scripts": {
+    "test": "node foodfork.js",
+	"start": "node foodfork.js"
+  },
+  "author": "Dave Pierre & Dave Xin",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "morgan": "^1.9.0",
+	"request": "^2.81.0"
+  }
+}
