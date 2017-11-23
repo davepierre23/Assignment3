@@ -55,30 +55,6 @@ app.use(express.static(__dirname + ROOT_DIR)); //provide static server
 
 //Routes
 //catch all requests an log them using app.all route
-app.post('/recipes?ingredients', (req,res)=>{
-   let ingredient = req.query.ingredients
-    const url =`http://food2fork.com/api/search?q=${ingredient}&key=${API_KEY}`;
-  console.log("I printred");
-
-  requestModule.get(url, (err, response, data)=>{
-    console.log("data first");
-    console.log(data);
-    receipesFromAPI =data
-    console.log(data);
-    console.log("Data addded ");
-
-     receipesFromAPI = JSON.parse(receipesFromAPI);
-    console.log(receipesFromAPI.recipes[0]);
-
-
-
-
-      return res.contentType('application/json').json(JSON.parse(render(data)))
-
-
-  //might have to put next
-})
-})
 
 app.get('/recipes', (req,res)=>{
   let ingredients = req.query.ingredients;
@@ -104,13 +80,35 @@ app.get('/recipes', (req,res)=>{
           console.log(data);
           console.log("Data addded ");
 
+
            receipesFromAPI = JSON.parse(receipesFromAPI);
-          console.log(receipesFromAPI.recipes[0]);
+           let receipesArray =[];
+           console.log(receipesFromAPI);
+          if (receipesFromAPI.count>0)
+           for (let i= 0; i<5; i++ ){
+             receipesArray.push({title:receipesFromAPI.recipes[i].title,
+              food2fork_url:receipesFromAPI.recipes[i].f2f_url,
+              image:receipesFromAPI.recipes[i].image_url})
 
 
 
+          }
+          var page = '<html><head><title>API Example</title></head>' +
+            '<body>' +
+            '<form method="post">' +
+            'ingredient: <input name="ingredient"><br>' +
+            '<input type="submit" value="Get Receipes">' +
+            '</form>'
+          if(receipesFromAPI){
+            page += '<h1>Receipe</h1><p>' + '<image'cu+receipesArray[0].title+'</div>' +'</p>'
+          }
+          page += '</body></html>'
+          console.log(page);
+        //  page =JSON.stringify(page);
+          res.send(page);
+        //  return res.contentType('text/html').json(page)
 
-            return res.contentType('application/json').json(JSON.parse(render(data)))
+
 
 
       })
@@ -127,17 +125,6 @@ function render(receipeData){
     return receipeData;
 //  }
 
-}
-
-function parseData(recipeResponse, res) {
-  let recipeData = ''
-  recipeResponse.on('data', function (chunk) {
-    recipeData += chunk
-  })
-  recipeResponse.on('end', function () {
-	  console.log("recipeData: ", recipeData);
-    sendResponse(recipeData, res)
-  })
 }
 
 
